@@ -3,8 +3,8 @@
         <div class="top">
             <span>微信</span>
             <div>
-                <img src="./assets/search.svg" alt="">
-                <img src="./assets/plus.svg" alt="">
+                <img src="../assets/search.svg" alt="">
+                <img src="../assets/plus.svg" alt="">
             </div>
         </div>
         <div class="config" v-if="showConfig">
@@ -26,7 +26,7 @@
     </div>
 </template>
 <script>
-import {imgs,names} from './assets/mock'
+import {imgs,names} from '../assets/mock'
 export default {
     data() {
         return {
