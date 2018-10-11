@@ -8,7 +8,7 @@
             </div>
         </div>
 
-        <ul class="ul">
+        <ul class="ul scroll">
             <li v-for="(item,idx) in list" :key="idx" @click="detail(item)">
                 <div class="badge">1</div>
                 <div class="img-wrapper">
@@ -96,11 +96,11 @@
     	text-align: center;
     }
     .top {
-    	height: 48px;
+    	height: 50px;
     	background: black;
     	width: 100%;
     	color: white;
-    	line-height: 48px;
+    	line-height: 50px;
     	padding: 0 10px;
     	display: flex;
     	box-sizing: border-box;
