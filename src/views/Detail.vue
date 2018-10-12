@@ -3,7 +3,10 @@
         <div class="top">
             <div class="left">
                 <i class="iconfont icon-fanhui" @click="$router.push({name: 'list'})"></i>
-                {{info.name}}
+                微信
+            </div>
+            <div class="mid">
+                {{info.name || 'dafda1'}}
             </div>
             <i class="iconfont icon-gengduo"></i>
         </div>
@@ -17,7 +20,7 @@
                 <img :src="info.img" alt="">
                 <div class="money">
                     <span>
-                        {{info.money || 20}}
+                        {{info.money || 20 }}
                     </span>
                 </div>
             </div>
@@ -58,15 +61,20 @@ export default {
     box-sizing: border-box;
     justify-content: space-between;
     align-items: center;
+    position: relative;
     i {
         font-size: 20px;
     }
-    > div {
+    >.left {
         display: flex;
         align-items: center;
-        > i {
-            margin-right: 8px;
-        }
+        font-size: 18px;
+    }
+    .mid {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
     }
 }
 .main {
@@ -93,22 +101,22 @@ export default {
             margin-right: 10px;
         }
         > .money {
-            background-image: url('../assets/money1.png');
+            background-image: url('../assets/ios.png');
             width: 60%;
             background-size: contain;
             background-repeat: no-repeat;
             height: 90px;
             position: relative;
             > span {
-                font-size: 12px;
+                font-size: 14px;
                 color: white;
                 position: absolute;
-                top: 30px;
-                left: 62px;
+                top: 12px;
+                left: 72px;
                 @media screen and (min-width: 380px) {
                     & {
-                        top: 34px;
-                        left: 68px;
+                        top: 14px;
+                        left: 79px;
                     }
                 }
             }
@@ -118,7 +126,7 @@ export default {
 .footer {
     height: 50px;
     position: fixed;
-    background: white;
+    background: #f6f6f8;
     left: 0;
     bottom: 0;
     width: 100%;
@@ -133,10 +141,11 @@ export default {
         font-size: 30px;
     }
     > div {
-        width: 60%;
-        border-bottom: 1px solid #ddd;
-        align-self: flex-start;
-        height: 37px;
+        width: 67%;
+        border: 1px solid #ddd;
+        height: 35px;
+        border-radius: 3px;
+        background: white;
     }
 }
 </style>

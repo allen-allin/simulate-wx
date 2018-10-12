@@ -16,6 +16,7 @@
         },
         methods: {
             ok() {
+                sessionStorage.removeItem('cache')
                 this.$router.push({
                     name: 'list',
                     params: {
