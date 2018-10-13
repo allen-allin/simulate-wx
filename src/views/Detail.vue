@@ -3,11 +3,9 @@
         <div class="top">
             <div class="left">
                 <i class="iconfont icon-fanhui" @click="$router.push({name: 'list'})"></i>
-                微信
+                {{info.name }}
             </div>
-            <div class="mid">
-                {{info.name || 'dafda1'}}
-            </div>
+
             <i class="iconfont icon-gengduo"></i>
         </div>
 
@@ -20,7 +18,7 @@
                 <img :src="info.img" alt="">
                 <div class="money">
                     <span>
-                        {{info.money || 20 }}
+                        {{info.money}}
                     </span>
                 </div>
             </div>
@@ -43,8 +41,11 @@ export default {
         }
     },
     created() {
-        this.info = this.$route.params
-        console.log(this.$route.params)
+        this.info = {  
+            name: '简简单单',
+            money: 88,
+            ...this.$route.query,
+        }
     }
 }
 </script>
@@ -52,7 +53,7 @@ export default {
 <style lang="scss" scoped>
 .top {
     height: 50px;
-    background: black;
+    background:  rgb(48,48,48);;
     width: 100%;
     color: white;
     line-height: 50px;
@@ -63,12 +64,15 @@ export default {
     align-items: center;
     position: relative;
     i {
-        font-size: 20px;
+        font-size: 18px;
     }
     >.left {
         display: flex;
         align-items: center;
-        font-size: 18px;
+        font-size: 16px;
+        >i {
+            margin-right: 10px;
+        }
     }
     .mid {
         position: absolute;
@@ -101,22 +105,22 @@ export default {
             margin-right: 10px;
         }
         > .money {
-            background-image: url('../assets/ios.png');
+            background-image: url('../assets/android1.png');
             width: 60%;
             background-size: contain;
             background-repeat: no-repeat;
             height: 90px;
             position: relative;
             > span {
-                font-size: 14px;
+                font-size: 12px;
                 color: white;
                 position: absolute;
-                top: 12px;
-                left: 72px;
+                top: 30px;
+                left: 62px;
                 @media screen and (min-width: 380px) {
                     & {
-                        top: 14px;
-                        left: 79px;
+                        top: 34px;
+                        left: 68px;
                     }
                 }
             }
@@ -142,10 +146,11 @@ export default {
     }
     > div {
         width: 67%;
-        border: 1px solid #ddd;
-        height: 35px;
-        border-radius: 3px;
-        background: white;
+        border-bottom: 1px solid #ddd;
+        height: 38px;
+        // border-radius: 3px;
+        // background: white;
+        align-self: flex-start;
     }
 }
 </style>

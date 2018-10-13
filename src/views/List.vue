@@ -1,10 +1,14 @@
 <template>
     <div>
         <div class="top">
-            <span>微信</span>
-            <i class="iconfont fz19 icon-plus"></i>
+            <span>微信<span v-show="badge">({{badge}})</span>
+            </span>
+            <div>
+                <i class="iconfont fz19 icon-sousuo"></i>
+                <i class="iconfont fz19 icon-plus"></i>
+            </div>
         </div>
-        <div class="search">
+        <!-- <div class="search">
             <div>
                 <div>
                     <i class="iconfont fz16 icon-Icon_Magnifier"></i>&nbsp;&nbsp;搜索
@@ -12,7 +16,7 @@
                 <i class="iconfont fz16 icon-huatong"></i>
             </div>
 
-        </div>
+        </div> -->
         <ul class="ul scroll">
             <li v-for="(item,idx) in list" :key="idx" @click="detail(item,idx)">
                 <div class="badge" v-if="item.showBagde">1</div>
@@ -24,13 +28,13 @@
                         <span class="name">{{ item.name }}</span>
                         <span>{{ item.time }}</span>
                     </div>
-                    <span><span style="color: #8a1d34">[转账]</span> 请你确认收钱</span>
+                    <span>[转账]{{item.showBagde ? '请你确认收钱': '你已确认收钱'}} </span>
                 </div>
             </li>
         </ul>
 
         <div class="footer">
-            <div class="badge" v-if="badge">{{badge}}</div>
+            <div class="badge" v-show="badge">{{badge}}</div>
             <div class="wx">
                 <i class="iconfont fz24 icon-duanxin"></i>
                 <span>微信</span>
@@ -44,56 +48,7 @@
 </template>
 <script>
     import { imgs, names } from '../assets/mock'
-
-    function getRandom(Min = 0, Max = 150) {
-    	var Range = Max - Min
-    	var Rand = Math.random()
-    	return Min + Math.round(Rand * Range)
-    }
-
-    function shuffle(arr) {
-    	for (
-    		var j, x, i = arr.length;
-    		i;
-    		j = parseInt(Math.random() * i),
-    			x = arr[--i],
-    			arr[i] = arr[j],
-    			arr[j] = x
-    	);
-    	return arr
-    }
-
-    function getTime(type) {
-    	const date = new Date()
-    	//如果不是求当前时间，则随机往前推 2 - 300 分钟 （一分钟60000毫秒）
-    	const d =
-    		type === 'now'
-    			? date
-    			: new Date(date.getTime() - 60000 * getRandom(2, 300))
-    	let hour = d.getHours()
-    	let m = d.getMinutes()
-
-    	let s = ''
-
-    	if (hour < 6) {
-    		s = '凌晨'
-    	} else if (hour < 12) {
-    		s = '早上'
-    	} else if (hour < 13) {
-    		s = '中午'
-    	} else if (hour < 17) {
-    		s = '下午'
-    	} else {
-    		s = '晚上'
-    	}
-        hour = hour === 0 ? 12 : hour
-    	const h = hour > 12 ? hour - 12 : hour
-        m = m < 10 ? `0${m}` : m
-    	return {
-    		str: `${s} ${h}:${m}`,
-    		tamp: d.getTime()
-    	}
-    }
+    import { getRandom, shuffle, getTime } from '../assets/utils'
 
     const initImgs = shuffle(imgs)
     const initNames = shuffle(names)
@@ -101,8 +56,7 @@
     export default {
     	data() {
     		return {
-    			list: [],
-    			count: 150
+    			list: []
     		}
     	},
     	computed: {
@@ -112,55 +66,87 @@
     		}
     	},
     	created() {
-    		this.init()
-    		this.render()
+    		const {
+    			delay = 3,
+    			count = 3,
+    			duration = 10,
+    			money = 88
+    		} = this.$route.query
+
+    		this.init(money)
+
+    		setTimeout(() => {
+    			let t = 0
+    			const timer = setInterval(() => {
+    				this.render(money)
+    			}, 1000 / count)
+
+    			const temp = setInterval(() => {
+    				t++
+    				if (t >= duration) {
+    					clearInterval(timer)
+    					clearInterval(temp)
+    				}
+    			}, 1000)
+    		}, delay * 1000)
     	},
     	methods: {
-    		init() {
+    		init(money) {
     			const cache = JSON.parse(sessionStorage.getItem('cache'))
     			if (cache) {
     				this.list = cache
     			} else {
     				const arr = []
     				for (let idx = 0; idx < 10; idx++) {
-                        var {str,tamp} = getTime()
+    					var { str, tamp } = getTime()
     					arr.push({
     						name: initNames[idx],
     						img: initImgs[idx],
-                            time: str,
-                            tamp,
-    						money: Math.random().toFixed(1) * 100,
+    						time: str,
+    						tamp,
+    						money: money.toFixed(2),
     						showBagde: false
     					})
-                    }
-                    this.list = arr.sort((a,b) => b.tamp - a.tamp)
+    				}
+    				this.list = arr.sort((a, b) => b.tamp - a.tamp)
     			}
     		},
-    		render() {
-    			let range = [7, 17]
-    			let t = 0
-    			setInterval(() => {
-    				t++
-    				if (range.some(v => !(t % v))) {
-    					const idx = getRandom(10, 150)
-    					this.list.unshift({
-    						name: initNames[idx],
-    						img: initImgs[idx],
-    						time: getTime('now').str,
-    						money: Math.random().toFixed(1) * 100,
-    						showBagde: true
-    					})
-    				}
-    			}, 1000)
+    		render(money) {
+    			const idx = getRandom(10, 250)
+    			this.list.unshift({
+    				name: initNames[idx],
+    				img: initImgs[idx],
+    				time: getTime('now').str,
+    				money: money.toFixed(2),
+    				showBagde: true
+    			})
     		},
+    		// render() {
+    		// 	let range = [7, 17]
+    		// 	let t = 0
+    		// 	setInterval(() => {
+    		// 		t++
+    		// 		if (range.some(v => !(t % v))) {
+    		// 			const idx = getRandom(10, 150)
+    		// 			this.list.unshift({
+    		// 				name: initNames[idx],
+    		// 				img: initImgs[idx],
+    		// 				time: getTime('now').str,
+    		// 				money: Math.random().toFixed(1) * 100,
+    		// 				showBagde: true
+    		// 			})
+    		// 		}
+    		// 	}, 10000)
+    		// },
     		detail(item, idx) {
     			const { list } = this
     			item.showBagde = false
-    			list.splice(idx, 1, item)
+    			list.splice(idx, 1)
+    			list.unshift(item)
     			sessionStorage.setItem('cache', JSON.stringify(list))
     			this.$router.push({
     				name: 'detail',
-    				params: item
+    				query: item
     			})
     		}
     	}
@@ -184,37 +170,34 @@
     	color: rgb(26, 173, 25);
     }
     .badge {
-    	width: 23px;
-    	height: 23px;
-    	line-height: 23px;
+    	width: 22px;
+    	height: 22px;
+    	line-height: 22px;
     	border-radius: 50%;
     	background: red;
     	position: absolute;
-    	left: 48px;
-    	top: 1px;
+    	left: 45px;
+    	top: 2px;
     	color: white;
     	font-size: 10px;
     	text-align: center;
     	transform: scale(0.8);
+    	display: flex;
+    	justify-content: center;
+    	align-items: center;
     }
     .top {
     	height: 50px;
-    	background: black;
+    	background: rgb(48, 48, 48);
     	width: 100%;
     	color: white;
-    	position: relative;
-
-    	> span {
-    		position: absolute;
-    		top: 50%;
-    		left: 50%;
-    		transform: translate(-50%, -50%);
-    	}
-    	> i {
-    		position: absolute;
-    		top: 50%;
-    		right: 15px;
-    		transform: translateY(-50%);
+    	display: flex;
+    	justify-content: space-between;
+    	align-items: center;
+    	padding: 0 20px 0 15px;
+    	box-sizing: border-box;
+    	.icon-plus {
+    		margin-left: 45px;
     	}
     }
     .search {
@@ -249,7 +232,7 @@
     	}
     }
     .ul {
-    	height: calc(100vh - 150px);
+    	height: calc(100vh - 120px);
     	overflow: auto;
     	li {
     		width: 100%;
@@ -305,12 +288,13 @@
     	align-items: center;
     	.badge {
     		position: fixed;
-    		bottom: 35px;
-    		min-width: 23px;
-    		padding: 0 5px;
+    		bottom: 28px;
+    		padding: 0 7px;
     		border-radius: 11px;
     		letter-spacing: 1px;
     		top: auto;
+    		width: auto;
+    		left: 38px;
     	}
     	> div {
     		display: flex;
