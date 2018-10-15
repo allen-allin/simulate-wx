@@ -8,6 +8,7 @@
             </div>
             <span class="mid">{{time}}</span>
             <div class="right">
+                <i class="iconfont icon-shengjingyin"></i>
                 <i class="iconfont icon-suo"></i>
                 <i class="iconfont icon-lanya"></i>              
                 <i class="iconfont icon-iconset0251"></i>              
@@ -62,8 +63,13 @@ export default {
         color: white;
     }
     >.right {
+        display: flex;
+        align-items: center;
         >i {
-            font-size: 16px;
+            font-size: 12px;
+        }
+        .icon-iconset0251 {
+            font-size: 17px;
         }
     }
 }

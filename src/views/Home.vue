@@ -10,7 +10,7 @@
             <span>延迟：</span> <input type="number" v-model="delay"> 秒后开始
         </div>
         <div>
-            <span>转账金额：</span> <input type="number" v-model="money"> 元
+        <span>转账金额：</span> <input type="number" v-model="min"> ~ <input type="number" v-model="max">元
         </div>
         <button @click="ok">确定</button>
     </div>
@@ -25,7 +25,8 @@
                 count: 3,
                 duration: 10,
                 delay: 3,
-                money: 88
+                min: 10,
+                max: 1000
             }
         },
         methods: {
@@ -49,7 +50,8 @@
                         count: this.count,
                         duration: this.duration,
                         delay: this.delay,
-                        money: this.money
+                        min: this.min,
+                        max: this.max,
                     }
                 })
             }

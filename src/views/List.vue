@@ -69,16 +69,17 @@
     		const {
     			delay = 3,
     			count = 3,
-    			duration = 10,
-    			money = 88
+                duration = 10,
+                min = 10,
+    			max = 1000,
     		} = this.$route.query
 
-    		this.init(money)
+    		this.init(+min,+max)
 
     		setTimeout(() => {
     			let t = 0
     			const timer = setInterval(() => {
-    				this.render(money)
+    				this.render(+min,+max)
     			}, 1000 / count)
 
     			const temp = setInterval(() => {
@@ -91,7 +92,7 @@
     		}, delay * 1000)
     	},
     	methods: {
-    		init(money) {
+    		init(min,max) {
     			const cache = JSON.parse(sessionStorage.getItem('cache'))
     			if (cache) {
     				this.list = cache
@@ -104,20 +105,20 @@
     						img: initImgs[idx],
     						time: str,
     						tamp,
-    						money: money.toFixed(2),
+    						money: getRandom(min,max).toFixed(2),
     						showBagde: false
     					})
     				}
     				this.list = arr.sort((a, b) => b.tamp - a.tamp)
     			}
     		},
-    		render(money) {
+    		render(min,max) {
     			const idx = getRandom(10, 250)
     			this.list.unshift({
     				name: initNames[idx],
     				img: initImgs[idx],
     				time: getTime('now').str,
-    				money: money.toFixed(2),
+    				money: getRandom(min,max).toFixed(2),
     				showBagde: true
     			})
     		},
